@@ -1,22 +1,27 @@
-# 🧠 Medical Research RAG Chatbot
+# 🧠 Medical Research RAG Assistant
 
-A Retrieval-Augmented Generation (RAG) system that answers medical questions using information extracted from real medical research papers. The system retrieves relevant document chunks using semantic search and generates grounded answers using a Large Language Model.
+A full-stack Retrieval-Augmented Generation (RAG) system that answers medical questions using real research literature.
+
+The system retrieves relevant information from curated medical research papers and clinical guidelines, then generates grounded answers using a large language model.
+
+Instead of relying solely on an LLM (which may hallucinate), this system performs **semantic retrieval from trusted medical sources before generating responses**.
 
 ---
 
-# 🚀 Overview
+# 🚀 Features
 
-This project builds a full-stack AI system capable of answering questions from medical research literature.
-
-Instead of relying purely on an LLM (which may hallucinate), this system retrieves relevant knowledge from indexed research papers and feeds that context to the LLM before generating an answer.
-
-The result is **more reliable, source-grounded responses**.
+* Retrieval-Augmented Generation (RAG) pipeline
+* Semantic search over medical research papers
+* Answers grounded in retrieved sources
+* Source references returned with responses
+* Modern full-stack architecture
+* Deployable backend and frontend
 
 ---
 
 # 🏗️ System Architecture
 
-```
+```text
 Medical Research PDFs
         │
         ▼
@@ -35,25 +40,24 @@ Vector Database (FAISS)
 Retriever
         │
         ▼
-LLM (Groq Llama-3.3-70B)
+LLM (Groq - Llama 3.3 70B)
         │
         ▼
-Generated Answer + Source References
+Answer + Source Citations
 ```
 
 ---
 
 # 📁 Project Structure
 
-```
+```text
 medical_rag/
 │
 ├── backend/
 │   ├── main.py
 │   ├── retriever.py
 │   ├── rag_pipeline.py
-│   ├── requirements.txt
-│   └── (faiss_index.bin and chunks_metadata.pkl stored locally)
+│   └── requirements.txt
 │
 ├── frontend/
 │   ├── index.html
@@ -70,106 +74,159 @@ medical_rag/
 └── .gitignore
 ```
 
+Note: Large generated files like the FAISS index are not stored in the repository.
+
 ---
 
 # 🛠️ Tech Stack
 
-| Layer           | Technology              |
-| --------------- | ----------------------- |
-| PDF Processing  | PyMuPDF                 |
-| OCR             | Tesseract + Pytesseract |
-| Embeddings      | sentence-transformers   |
-| Vector Database | FAISS                   |
-| LLM             | Groq (Llama-3.3-70B)    |
-| Backend API     | FastAPI                 |
-| Frontend        | React + Vite            |
-| Deployment      | Render + Vercel         |
+| Layer           | Technology                               |
+| --------------- | ---------------------------------------- |
+| PDF Processing  | PyMuPDF                                  |
+| OCR             | Tesseract + Pytesseract                  |
+| Embeddings      | sentence-transformers (all-MiniLM-L6-v2) |
+| Vector Database | FAISS                                    |
+| LLM             | Groq (Llama-3.3-70B-versatile)           |
+| Backend         | FastAPI + Uvicorn                        |
+| Frontend        | React + Vite                             |
+| Deployment      | Render (backend) + Vercel (frontend)     |
 
 ---
 
 # 📊 Dataset Summary
 
-| Item                 | Count |
-| -------------------- | ----- |
-| Diseases             | 19    |
-| Medical PDFs         | 89    |
-| Text Chunks          | 3897  |
-| Embedding Dimensions | 384   |
-| FAISS Vectors        | 3897  |
+| Item                  | Count |
+| --------------------- | ----- |
+| Diseases Covered      | 19    |
+| Total Research PDFs   | 89    |
+| Extracted Text Chunks | 3897  |
+| Embedding Dimensions  | 384   |
+| FAISS Vectors         | 3897  |
 
-The dataset contains medical research documents sourced from publicly available research papers and health organization publications.
+---
+
+# 📚 Dataset Sources
+
+The dataset was manually curated from authoritative medical and public health sources.
+
+### Sources Used
+
+1. **Official Clinical Guidelines**
+
+   * World Health Organization (WHO)
+   * Indian Council of Medical Research (ICMR)
+   * Ministry of Health & Family Welfare (MoHFW)
+
+2. **Clinical Management Guidelines**
+
+   * National Institute for Health and Care Excellence (NICE)
+
+3. **Research Evidence**
+
+   * Peer-reviewed systematic reviews or meta-analyses
+   * Retrieved from PubMed
+   * Published after 2018
+
+4. **Public Health and Prevention Guidance**
+
+   * World Health Organization (WHO)
+   * Centers for Disease Control and Prevention (CDC)
+
+These documents include clinical guidelines, systematic reviews, and public health advisories.
+
+---
+
+# 📥 Dataset Download
+
+The dataset contains large PDF files and therefore is **not stored directly in this repository**.
+
+Download it here:
+
+DATASET_LINK_HERE
+
+After downloading, place the files in the project directory:
+
+```text
+data/
+└── medical_papers/
+    ├── hypertension/
+    ├── tuberculosis/
+    ├── malaria/
+    └── ...
+```
 
 ---
 
 # ⚙️ Backend Setup
 
-### 1️⃣ Clone the repository
+## 1. Clone the Repository
 
-```
+```bash
 git clone https://github.com/yourusername/medical_rag.git
 cd medical_rag/backend
 ```
 
-### 2️⃣ Create virtual environment
+---
 
-```
+## 2. Create Virtual Environment
+
+```bash
 python -m venv venv
 ```
 
 Activate environment:
 
-**Windows**
+Windows:
 
-```
+```bash
 venv\Scripts\activate
 ```
 
-**Mac / Linux**
+Mac / Linux:
 
-```
+```bash
 source venv/bin/activate
 ```
 
 ---
 
-### 3️⃣ Install dependencies
+## 3. Install Dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-### 4️⃣ Add required files
+## 4. Add Required Files
 
-Place the following files inside the `backend/` folder:
+Place the following generated files inside the backend directory:
 
+```text
+backend/
+├── faiss_index.bin
+└── chunks_metadata.pkl
 ```
-faiss_index.bin
-chunks_metadata.pkl
-```
-
-These files contain the precomputed vector database and metadata.
 
 ---
 
-### 5️⃣ Add Groq API key
+## 5. Add API Key
 
-Create a `.env` file inside the backend directory.
+Create a `.env` file inside the backend folder.
 
-```
+```text
 GROQ_API_KEY=your_api_key_here
 ```
 
 ---
 
-### 6️⃣ Run backend server
+## 6. Run Backend
 
-```
+```bash
 uvicorn main:app --reload
 ```
 
-Backend will run at:
+Backend runs at:
 
 ```
 http://localhost:8000
@@ -181,19 +238,19 @@ http://localhost:8000
 
 Open a new terminal.
 
-```
+```bash
 cd medical_rag/frontend
 ```
 
-### Install dependencies
+Install dependencies:
 
-```
+```bash
 npm install
 ```
 
-### Run development server
+Run development server:
 
-```
+```bash
 npm run dev
 ```
 
@@ -207,23 +264,22 @@ http://localhost:5173
 
 # 🔌 API Endpoints
 
-| Method | Endpoint | Description          |
-| ------ | -------- | -------------------- |
-| GET    | /        | Health check         |
-| POST   | /chat    | Query the RAG system |
+| Method | Endpoint | Description                   |
+| ------ | -------- | ----------------------------- |
+| GET    | `/`      | Health check                  |
+| POST   | `/chat`  | Send query and receive answer |
 
-### Example Request
+Example request:
 
-```
-POST /chat
+```json
 {
   "query": "What are the symptoms of tuberculosis?"
 }
 ```
 
-### Example Response
+Example response:
 
-```
+```json
 {
   "answer": "...generated response...",
   "sources": ["document_1.pdf", "document_2.pdf"]
@@ -232,52 +288,75 @@ POST /chat
 
 ---
 
-# 🧠 How RAG Works
+# 🧠 How the RAG System Works
 
 1. User submits a question
 2. Question is converted into an embedding
 3. FAISS retrieves the most relevant text chunks
-4. Retrieved chunks are inserted into the LLM prompt
-5. LLM generates an answer grounded in retrieved context
+4. Retrieved context is injected into the prompt
+5. The LLM generates a grounded answer using retrieved knowledge
 
-This approach reduces hallucinations and enables question answering over large document collections.
+This approach significantly reduces hallucinations and allows querying large research collections.
 
 ---
 
 # ⚠️ Important Notes
 
-The following files are **not uploaded to GitHub**:
+The following files are **not included in the repository**:
 
-```
-faiss_index.bin
-chunks_metadata.pkl
-```
+* faiss_index.bin
+* chunks_metadata.pkl
+* dataset PDFs
 
-These files contain the FAISS vector index and metadata and should be stored locally or on the deployment server.
+These must be downloaded or generated locally.
 
 ---
 
 # 🌐 Deployment
 
-Backend can be deployed using **Render**.
+Backend can be deployed on **Render**.
 
-Frontend can be deployed using **Vercel**.
+Frontend can be deployed on **Vercel**.
 
-Ensure the backend API URL is updated inside the frontend configuration before deployment.
+Ensure the backend API URL is updated in the frontend configuration before deployment.
 
 ---
 
-# 📌 Future Improvements
+# 🔮 Future Improvements
 
 * Hybrid search (BM25 + vector search)
 * Re-ranking models
 * Streaming responses
 * Conversation memory
-* Advanced document filtering
-* Evaluation metrics for RAG performance
+* Document filtering
+* RAG evaluation metrics
+
+---
+
+# 🤝 Contributing
+
+Contributions, improvements, and suggestions are welcome.
+
+If you find issues or want to improve the project:
+
+1. Fork the repository
+2. Create a new branch
+3. Submit a pull request
+
+---
+
+# 💬 Support
+
+If you need help using or running this project, you can:
+
+* Open an **Issue** in this repository
+* Submit feature requests or bug reports
+* Reach out through GitHub discussions
 
 ---
 
 # 📜 License
 
-This project is intended for educational and research purposes.
+This project is licensed under the **Apache License 2.0**.
+
+You are free to use, modify, and distribute the code according to the terms of the license.
