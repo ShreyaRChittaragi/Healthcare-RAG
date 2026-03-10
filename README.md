@@ -142,7 +142,7 @@ The dataset contains large PDF files and therefore is **not stored directly in t
 
 Download it here:
 
-DATASET_LINK_HERE
+DATASET_LINK_HERE   : https://drive.google.com/drive/folders/12hxAU_YbbJgLUem6a_HWwdzZ3nyaHU7K?usp=drive_link
 
 After downloading, place the files in the project directory:
 
